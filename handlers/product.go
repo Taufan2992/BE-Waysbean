@@ -97,6 +97,7 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	request := productsdto.ProductRequest{
 		Title:       r.FormValue("title"),
 		Price:       price,
+		Image:       filepath,
 		Stock:       stock,
 		Description: r.FormValue("description"),
 	}
