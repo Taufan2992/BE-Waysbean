@@ -15,7 +15,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var path_file_cart = "http://localhost:5000/uploads/"
+var path_file_cart = "https://waysbean.herokuapp.com/api/v1/uploads/"
 
 type handlersCart struct {
 	CartRepository repositories.CartRepository
