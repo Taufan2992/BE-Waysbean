@@ -96,9 +96,8 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	stock, _ := strconv.Atoi(r.FormValue("stock"))
 
 	request := productsdto.ProductRequest{
-		Title: r.FormValue("title"),
-		Price: price,
-		// Image:       filename,
+		Title:       r.FormValue("title"),
+		Price:       price,
 		Stock:       stock,
 		Description: r.FormValue("description"),
 	}
