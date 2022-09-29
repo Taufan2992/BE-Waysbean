@@ -51,7 +51,7 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create Embed Path File on Image property here ...
-	data.Image = path_file + data.Image
+	data.Image = path_file_profile + data.Image
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: data}
