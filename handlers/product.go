@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
-	// "fmt"
+	"fmt"
 	"net/http"
 
 	// "os"
@@ -25,9 +25,9 @@ type productHandler struct {
 }
 
 // Create `path_file` Global variable here ...
-var path_file_product = "https://waysbean.herokuapp.com/api/v1/"
+// var path_file_product = "https://waysbean.herokuapp.com/api/v1/"
 
-// var path_file = "https://localhost:5000/uploads"
+var path_file_product = "https://localhost:5000/uploads"
 
 func HandlerProduct(ProductRepository repositories.ProductRepository) *productHandler {
 	return &productHandler{ProductRepository}
@@ -96,11 +96,11 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 	price, _ := strconv.Atoi(r.FormValue("price"))
 	stock, _ := strconv.Atoi(r.FormValue("stock"))
-
 	request := productsdto.ProductRequest{
 		Title:       r.FormValue("title"),
 		Price:       price,
 		Stock:       stock,
+		Image:       filename,
 		Description: r.FormValue("description"),
 	}
 
@@ -124,10 +124,9 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	// // Upload file to Cloudinary ...
 	// resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbean"})
 
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// }
-	// comment
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	// data form pattern submit to pattern entity db product
 	product := models.Product{
