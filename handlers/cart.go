@@ -15,7 +15,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// var path_file = "https://waysbean.herokuapp.com/uploads/"
+var path_file_cart = "https://waysbean.herokuapp.com/uploads/"
 
 type handlersCart struct {
 	CartRepository repositories.CartRepository
@@ -100,7 +100,7 @@ func (h *handlersCart) FindCartId(w http.ResponseWriter, r *http.Request) {
 
 	// Create Embed Path File on Image property here ...
 	for i, p := range cart {
-		cart[i].Product.Image = path_file + p.Product.Image
+		cart[i].Product.Image = path_file_cart + p.Product.Image
 	}
 
 	w.WriteHeader(http.StatusOK)
