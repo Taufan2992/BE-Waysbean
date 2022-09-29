@@ -2,20 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-
-	// "os"
 	"strconv"
 	productsdto "waysbean/dto/product"
 	dto "waysbean/dto/result"
 	"waysbean/models"
 	"waysbean/repositories"
 
-	// "context"
-
-	// "github.com/cloudinary/cloudinary-go/v2"
-	// "github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 )
@@ -25,9 +18,7 @@ type productHandler struct {
 }
 
 // Create `path_file` Global variable here ...
-// var path_file_product = "https://waysbean.herokuapp.com/api/v1/"
-
-var path_file_product = "https://localhost:5000/uploads"
+var path_file = "http://localhost:5000/uploads/"
 
 func HandlerProduct(ProductRepository repositories.ProductRepository) *productHandler {
 	return &productHandler{ProductRepository}
@@ -57,7 +48,7 @@ func (h *productHandler) FindProducts(w http.ResponseWriter, r *http.Request) {
 
 	// Create Embed Path File on Image property here ...
 	for i, p := range products {
-		products[i].Image = path_file_product + p.Image
+		products[i].Image = path_file + p.Image
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -80,7 +71,7 @@ func (h *productHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create Embed Path File on Image property here ...
-	product.Image = path_file_product + product.Image
+	product.Image = path_file + product.Image
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Data: convertResponseProduct(product)}
@@ -96,11 +87,11 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 	price, _ := strconv.Atoi(r.FormValue("price"))
 	stock, _ := strconv.Atoi(r.FormValue("stock"))
+
 	request := productsdto.ProductRequest{
 		Title:       r.FormValue("title"),
 		Price:       price,
 		Stock:       stock,
-		Image:       filename,
 		Description: r.FormValue("description"),
 	}
 
@@ -111,21 +102,6 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 		return
-	}
-
-	// var ctx = context.Background()
-	// var CLOUD_NAME = os.Getenv("CLOUD_NAME")
-	// var API_KEY = os.Getenv("API_KEY")
-	// var API_SECRET = os.Getenv("API_SECRET")
-
-	// // Add your Cloudinary credentials ...
-	// cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
-
-	// // Upload file to Cloudinary ...
-	// resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbean"})
-
-	if err != nil {
-		fmt.Println(err.Error())
 	}
 
 	// data form pattern submit to pattern entity db product
