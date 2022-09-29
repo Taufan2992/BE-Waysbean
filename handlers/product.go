@@ -125,6 +125,7 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	// if err != nil {
 	// 	fmt.Println(err.Error())
 	// }
+	// comment
 
 	// data form pattern submit to pattern entity db product
 	product := models.Product{
