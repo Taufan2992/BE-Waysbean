@@ -12,6 +12,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var path_file_profile = "https://waysbean.herokuapp.com/uploads/"
+
 type handler struct {
 	UserRepository repositories.UserRepository
 }
@@ -47,6 +49,9 @@ func (h *handler) GetUser(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
+
+	// Create Embed Path File on Image property here ...
+	data.Image = path_file + data.Image
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: data}
