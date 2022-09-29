@@ -25,7 +25,9 @@ type productHandler struct {
 }
 
 // Create `path_file` Global variable here ...
-var path_file = "https://waysbean.herokuapp.com/api/v1/"
+var path_file_product = "https://waysbean.herokuapp.com/api/v1/"
+
+// var path_file = "https://localhost:5000/uploads"
 
 func HandlerProduct(ProductRepository repositories.ProductRepository) *productHandler {
 	return &productHandler{ProductRepository}
@@ -55,7 +57,7 @@ func (h *productHandler) FindProducts(w http.ResponseWriter, r *http.Request) {
 
 	// Create Embed Path File on Image property here ...
 	for i, p := range products {
-		products[i].Image = path_file + p.Image
+		products[i].Image = path_file_product + p.Image
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -78,7 +80,7 @@ func (h *productHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create Embed Path File on Image property here ...
-	product.Image = path_file + product.Image
+	product.Image = path_file_product + product.Image
 
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Data: convertResponseProduct(product)}
