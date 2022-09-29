@@ -90,7 +90,7 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	dataContex := r.Context().Value("dataFile") // add this code
-	filepath := dataContex.(string)             // add this code
+	filename := dataContex.(string)             // add this code
 
 	price, _ := strconv.Atoi(r.FormValue("price"))
 	stock, _ := strconv.Atoi(r.FormValue("stock"))
@@ -130,7 +130,7 @@ func (h *productHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	product := models.Product{
 		Title:       request.Title,
 		Price:       request.Price,
-		Image:       filepath,
+		Image:       filename,
 		Stock:       request.Stock,
 		Description: request.Description,
 	}
@@ -158,7 +158,7 @@ func (h *productHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	stock, _ := strconv.Atoi(r.FormValue("stock"))
 
 	dataContex := r.Context().Value("dataFile") // add this code
-	filepath := dataContex.(string)             // add this code
+	filename := dataContex.(string)             // add this code
 
 	request := productsdto.ProductRequest{
 		Title:       r.FormValue("title"),
@@ -184,8 +184,8 @@ func (h *productHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	product.Stock = request.Stock
 	product.Description = request.Description
 
-	if filepath != "false" {
-		product.Image = filepath
+	if filename != "false" {
+		product.Image = filename
 	}
 
 	data, err := h.ProductRepository.UpdateProduct(product)
