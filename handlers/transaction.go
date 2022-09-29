@@ -19,6 +19,8 @@ import (
 	"github.com/midtrans/midtrans-go/snap"
 )
 
+var path_file_transaction = "https://waysbean.herokuapp.com/uploads/"
+
 var c = coreapi.Client{
 	ServerKey: os.Getenv("SERVER_KEY"),
 	ClientKey: os.Getenv("CLIENT_KEY"),
@@ -233,6 +235,11 @@ func (h *handlerTransaction) FindTransactionId(w http.ResponseWriter, r *http.Re
 		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
 		json.NewEncoder(w).Encode(response)
 		return
+	}
+
+	// Create Embed Path File on Image property here ...
+	for i, p := range transaction {
+		transaction[i].Carts[i].Product.Image = path_file_transaction + p.Carts[i].Product.Image
 	}
 
 	w.WriteHeader(http.StatusOK)
