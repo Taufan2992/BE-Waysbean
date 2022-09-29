@@ -4,10 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
-	dto "waysbean/dto/result"
 )
 
 func UploadFile(next http.HandlerFunc) http.HandlerFunc {
@@ -18,48 +16,18 @@ func UploadFile(next http.HandlerFunc) http.HandlerFunc {
 		// the Header and the size of the file
 		file, _, err := r.FormFile("image")
 
-		if err != nil && r.Method == "PATCH" {
-			ctx := context.WithValue(r.Context(), "dataFile", "false")
-			next.ServeHTTP(w, r.WithContext(ctx))
-			return
-		}
-
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
-			json.NewEncoder(w).Encode(response)
+			fmt.Println(err)
+			json.NewEncoder(w).Encode("Error Retrieving the File")
 			return
 		}
 		defer file.Close()
-
-		// setup file type filtering
-		buff := make([]byte, 512)
-		_, err = file.Read(buff)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
-			json.NewEncoder(w).Encode(response)
-			return
-		}
-
-		filetype := http.DetectContentType(buff)
-		if filetype != "image/jpeg" && filetype != "image/png" {
-			w.WriteHeader(http.StatusBadRequest)
-			response := dto.ErrorResult{Code: http.StatusBadRequest, Message: "The provided file format is not allowed. Please upload a JPEG or PNG image"}
-			json.NewEncoder(w).Encode(response)
-			return
-		}
-
-		_, err = file.Seek(0, io.SeekStart)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
-			json.NewEncoder(w).Encode(response)
-			return
-		}
-
-		// setup max-upload
-		const MAX_UPLOAD_SIZE = 10 << 20
+		// fmt.Printf("Uploaded File: %+v\n", handler.Filename)
+		// fmt.Printf("File Size: %+v\n", handler.Size)
+		// fmt.Printf("MIME Header: %+v\n", handler.Header)
+		const MAX_UPLOAD_SIZE = 10 << 20 // 10MB
+		// Parse our multipart form, 10 << 20 specifies a maximum
+		// upload of 10 MB files.
 		r.ParseMultipartForm(MAX_UPLOAD_SIZE)
 		if r.ContentLength > MAX_UPLOAD_SIZE {
 			w.WriteHeader(http.StatusBadRequest)
